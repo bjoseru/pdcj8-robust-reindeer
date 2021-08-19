@@ -18,17 +18,18 @@ from .help import show_help, BRIEF_HELP_TEXT
 logging.basicConfig(level=logging.INFO, filename="cube.log")
 log = logging.getLogger()
 
-def rotate_face(cubes, face: Tuple[Union[int, slice]], axis: str, clockwise: bool):
+def rotate_face(face: np.array, axis: str, clockwise: bool):
+    """Rotate a face of the cube."""
     direction = 1 if clockwise else -1
 
     rotate = getattr(Cube, "rotate_" + axis)
-    for cube in cubes[face].flatten():
+    for cube in face.flatten():
         rotate(cube, direction * np.pi / 2 )
 
     if axis == "z":
         direction *= -1
 
-    cubes[face] = np.rot90(cubes[face], -direction)
+    face[:] = np.rot90(face, -direction)
 
 @ManagedScreen
 def main_event_loop(screen: Screen = None) -> None:
@@ -61,33 +62,33 @@ def main_event_loop(screen: Screen = None) -> None:
                 # raise StopApplication("User terminated app")
                 return
             elif key == KeyboardCommand.rotate_front_ccw:  # rotate front disc counter-clockwise
-                rotate_face(cubes=rubik_cube, face=(slice(None), slice(None), 0), axis="z", clockwise=False)
+                rotate_face(face=rubik_cube[:, :, 0], axis="z", clockwise=False)
             elif key == KeyboardCommand.rotate_front_cw:  # rotate front disc clockwise
-                rotate_face(cubes=rubik_cube, face=(slice(None), slice(None), 0), axis="z", clockwise=True)
+                rotate_face(face=rubik_cube[:, :, 0], axis="z", clockwise=True)
             elif key == KeyboardCommand.rotate_top_cw:  # rotate top disc clockwise
-                rotate_face(cubes=rubik_cube, face=(slice(None), 0), axis="y", clockwise=True)
+                rotate_face(face=rubik_cube[:, 0], axis="y", clockwise=True)
             elif key == KeyboardCommand.rotate_top_ccw:  # rotate top disc counter-clockwise
-                rotate_face(cubes=rubik_cube, face=(slice(None), 0), axis="y", clockwise=False)
+                rotate_face(face=rubik_cube[:, 0], axis="y", clockwise=False)
             elif key == KeyboardCommand.rotate_middle_ccw:  # rotate middle disk counter-clockwise
-                rotate_face(cubes=rubik_cube, face=(slice(None), slice(None), 1), axis="z", clockwise=False)
+                rotate_face(face=rubik_cube[:, :, 1], axis="z", clockwise=False)
             elif key == KeyboardCommand.rotate_middle_cw:
-                rotate_face(cubes=rubik_cube, face=(slice(None), slice(None), 1), axis="z", clockwise=True)
+                rotate_face(face=rubik_cube[:, :, 1], axis="z", clockwise=True)
             elif key == KeyboardCommand.rotate_back_ccw:  # rotate back disk counter-clockwise
-                rotate_face(cubes=rubik_cube, face=(slice(None), slice(None), 2), axis="z", clockwise=False)
+                rotate_face(face=rubik_cube[:, :, 2], axis="z", clockwise=False)
             elif key == KeyboardCommand.rotate_back_cw:  # rotate back disk clockwise
-                rotate_face(cubes=rubik_cube, face=(slice(None), slice(None), 2), axis="z", clockwise=True)
+                rotate_face(face=rubik_cube[:, :, 2], axis="z", clockwise=True)
             elif key == KeyboardCommand.rotate_bottom_ccw:
-                rotate_face(cubes=rubik_cube, face=(slice(None), 2), axis="y", clockwise=False)
+                rotate_face(face=rubik_cube[:, 2], axis="y", clockwise=False)
             elif key == KeyboardCommand.rotate_bottom_cw:
-                rotate_face(cubes=rubik_cube, face=(slice(None), 2), axis="y", clockwise=True)
+                rotate_face(face=rubik_cube[:, 2], axis="y", clockwise=True)
             elif key == KeyboardCommand.rotate_left_ccw:
-                rotate_face(cubes=rubik_cube, face=(0,), axis="x", clockwise=False)
+                rotate_face(face=rubik_cube[0], axis="x", clockwise=False)
             elif key == KeyboardCommand.rotate_left_cw:
-                rotate_face(cubes=rubik_cube, face=(0,), axis="x", clockwise=True)
+                rotate_face(face=rubik_cube[0], axis="x", clockwise=True)
             elif key == KeyboardCommand.rotate_right_ccw:
-                rotate_face(cubes=rubik_cube, face=(2,), axis="x", clockwise=False)
+                rotate_face(face=rubik_cube[2], axis="x", clockwise=False)
             elif key == KeyboardCommand.rotate_right_cw:
-                rotate_face(cubes=rubik_cube, face=(2,), axis="x", clockwise=True)
+                rotate_face(face=rubik_cube[2], axis="x", clockwise=True)
             elif key == KeyboardCommand.reset_view:
                 artist.set_initial_camera()
             elif key == KeyboardCommand.help:
