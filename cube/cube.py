@@ -4,6 +4,7 @@ from asciimatics.screen import Screen
 from . import rotation
 from .artist import Artist
 
+
 class Cube:
     """A 1x1x1 cube."""
 
