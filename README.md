@@ -108,17 +108,21 @@ This project has been designed and coded in about a week by the
 following Robust Reindeer team, consisting of the Python-Discord
 members:
 
-- Björn (team-lead)
-- aaronshenhao
-- mathsman
-- Dude Saber
-- HellRevenger
-- Keppo
+- [Björn](https://github.com/bjoseru) (team-lead)
+- [aaronshenhao](https://github.com/aaronshenhao)
+- [mathsman](https://github.com/mathsman5133)
+- [Dude Saber](https://github.com/clllllllllc)
+- [HellRevenger](https://github.com/reply7251)
+- [Keppo](https://github.com/fauortiz)
 
 Contributions included conception, the mathematics required for the
 geometry and 3D rendering, exploration of TUI frameworks, various
 proof-of-concept prototypes, the final coding, and of course this
 documentation.
+
+A range of improvements have been contributed by
+[salt-die](https://github.com/salt-die) after the conclusion of the
+jam.
 
 This code is licenced unter [The MIT License](https://opensource.org/licenses/MIT).
 
