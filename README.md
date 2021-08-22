@@ -41,7 +41,7 @@ Now install the dependencies
 
 You are now ready to run the app with
 ``` bash
-    python ./cube.py
+    python -m cube
 ```
 
 ## COMMANDS##

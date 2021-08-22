@@ -3,9 +3,8 @@ from typing import NamedTuple
 
 
 class HelpEntry(NamedTuple):
-    """
-    Helper class to hold help information and extract help from markdown files.
-    """
+    """Helper class to hold help information and extract help from markdown files."""
+
     name: str
     description: str
 

@@ -1,10 +1,11 @@
+import logging
 from pathlib import Path
 from typing import Callable
 
 from asciimatics.exceptions import StopApplication
 from asciimatics.scene import Scene
-from asciimatics.widgets import Button, Divider, Frame, Layout, TextBox
 from asciimatics.screen import Screen
+from asciimatics.widgets import Button, Divider, Frame, Layout, TextBox
 
 from .data_structures import HelpEntry
 
@@ -44,7 +45,7 @@ class HelpMenu(Frame):
             screen.width * 2 // 3,
             hover_focus=True,
             can_scroll=False,
-            title="Robust Reindeers - Rubik's Cube Help"
+            title="Robust Reindeers - Rubik's Cube Help",
         )
         self.palette["layout"] = (0, 0, 0)
 
@@ -76,6 +77,7 @@ class HelpMenu(Frame):
 
     def _button_wrapper(self, index: int) -> Callable[..., None]:
         """Return a wrapper that will update the extended help menu when a button of this index is pressed."""
+
         def wrapper() -> None:
             help = HELP[index]
             self._long_help_box.value = f"{help.name}::\n{help.description}"
@@ -87,7 +89,7 @@ class HelpMenu(Frame):
         raise StopApplication("user quit")
 
 
-def show_help(screen: Screen, log) -> None:
+def show_help(screen: Screen, log: logging.Logger) -> None:
     """Show the help session, respond to user input and return to the cube once the user clicks the Quit button."""
     screen.clear_buffer(0, 0, 0)
     screen.refresh()

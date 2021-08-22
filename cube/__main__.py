@@ -1,35 +1,36 @@
 #!/usr/bin/env python
 # coding: utf-8
-from itertools import product
 import logging
 import time
-from typing import Tuple, Union
+from itertools import product
 
 import numpy as np
 from asciimatics.event import KeyboardEvent, MouseEvent
 from asciimatics.screen import ManagedScreen, Screen
 
 from . import rotation
-from .artist import Artist, DISTANCE_TO_CAMERA
+from .artist import DISTANCE_TO_CAMERA, Artist
 from .cube import Cube
 from .data_structures import KeyboardCommand
-from .help import show_help, BRIEF_HELP_TEXT
+from .help import BRIEF_HELP_TEXT, show_help
 
 logging.basicConfig(level=logging.INFO, filename="cube.log")
 log = logging.getLogger()
 
-def rotate_face(face: np.array, axis: str, clockwise: bool):
+
+def rotate_face(face: np.array, axis: str, clockwise: bool) -> None:
     """Rotate a face of the cube."""
     direction = 1 if clockwise else -1
 
     rotate = getattr(Cube, "rotate_" + axis)
     for cube in face.flatten():
-        rotate(cube, direction * np.pi / 2 )
+        rotate(cube, direction * np.pi / 2)
 
     if axis == "z":
         direction *= -1
 
     face[:] = np.rot90(face, -direction)
+
 
 @ManagedScreen
 def main_event_loop(screen: Screen = None) -> None:
@@ -39,7 +40,10 @@ def main_event_loop(screen: Screen = None) -> None:
 
     # the Rubik cube is made up of 27 individual cubes
     rubik_cube = np.array(
-        [ Cube(np.array(coord)) for coord in product((-1, 0, 1), (1, 0, -1), (1, 0, -1)) ],
+        [
+            Cube(np.array(coord))
+            for coord in product((-1, 0, 1), (1, 0, -1), (1, 0, -1))
+        ],
         dtype=object,
     ).reshape(3, 3, 3)
 
@@ -61,19 +65,27 @@ def main_event_loop(screen: Screen = None) -> None:
             if key == KeyboardCommand.quit:
                 # raise StopApplication("User terminated app")
                 return
-            elif key == KeyboardCommand.rotate_front_ccw:  # rotate front disc counter-clockwise
+            elif (
+                key == KeyboardCommand.rotate_front_ccw
+            ):  # rotate front disc counter-clockwise
                 rotate_face(face=rubik_cube[:, :, 0], axis="z", clockwise=False)
             elif key == KeyboardCommand.rotate_front_cw:  # rotate front disc clockwise
                 rotate_face(face=rubik_cube[:, :, 0], axis="z", clockwise=True)
             elif key == KeyboardCommand.rotate_top_cw:  # rotate top disc clockwise
                 rotate_face(face=rubik_cube[:, 0], axis="y", clockwise=True)
-            elif key == KeyboardCommand.rotate_top_ccw:  # rotate top disc counter-clockwise
+            elif (
+                key == KeyboardCommand.rotate_top_ccw
+            ):  # rotate top disc counter-clockwise
                 rotate_face(face=rubik_cube[:, 0], axis="y", clockwise=False)
-            elif key == KeyboardCommand.rotate_middle_ccw:  # rotate middle disk counter-clockwise
+            elif (
+                key == KeyboardCommand.rotate_middle_ccw
+            ):  # rotate middle disk counter-clockwise
                 rotate_face(face=rubik_cube[:, :, 1], axis="z", clockwise=False)
             elif key == KeyboardCommand.rotate_middle_cw:
                 rotate_face(face=rubik_cube[:, :, 1], axis="z", clockwise=True)
-            elif key == KeyboardCommand.rotate_back_ccw:  # rotate back disk counter-clockwise
+            elif (
+                key == KeyboardCommand.rotate_back_ccw
+            ):  # rotate back disk counter-clockwise
                 rotate_face(face=rubik_cube[:, :, 2], axis="z", clockwise=False)
             elif key == KeyboardCommand.rotate_back_cw:  # rotate back disk clockwise
                 rotate_face(face=rubik_cube[:, :, 2], axis="z", clockwise=True)
@@ -106,9 +118,7 @@ def main_event_loop(screen: Screen = None) -> None:
                 end_pos = np.array([mouse_x, mouse_y])
 
                 camera_2d += end_pos - start_pos
-                camera_2d_normalised = (
-                    camera_2d / (screen.width, screen.height) * np.pi
-                )
+                camera_2d_normalised = camera_2d / (screen.width, screen.height) * np.pi
                 alpha, beta = camera_2d_normalised
 
                 R = rotation.Ry(alpha) @ rotation.Rx(beta)
@@ -124,7 +134,9 @@ def main_event_loop(screen: Screen = None) -> None:
                 start_pos = end_pos
 
             else:
-                log.info("not registering mouse movement because auto-mouse has been disabled.")
+                log.info(
+                    "not registering mouse movement because auto-mouse has been disabled."
+                )
 
         current_time = time.time_ns()
         if not current_time == last_time:
@@ -234,5 +246,6 @@ def main_event_loop(screen: Screen = None) -> None:
             )
 
         screen.refresh()
+
 
 main_event_loop()

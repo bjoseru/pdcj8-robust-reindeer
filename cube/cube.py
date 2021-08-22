@@ -10,7 +10,7 @@ class Cube:
 
     __slots__ = ("front", "back", "normal_vectors", "colours", "position")
 
-    def __init__(self, position: np.array=np.array([0, 0, 0])):
+    def __init__(self, position: np.array = np.array([0, 0, 0])):
         self.position = position
 
         # define corner points of front face and back face, starting in top left, going clockwise
@@ -30,7 +30,9 @@ class Cube:
             np.array([-1, -1, -1]),
         ]
 
-        self.front = [pt / 2 + position for pt in front]  # make the cubes side lengths equal to one
+        self.front = [
+            pt / 2 + position for pt in front
+        ]  # make the cubes side lengths equal to one
         self.back = [pt / 2 + position for pt in back]
 
         self.normal_vectors = {
@@ -146,14 +148,14 @@ class Cube:
         # sort the list by alignment, pick the largest, return the corresponding face colour
         return self.colours[sorted(face_list, key=lambda x: x[1], reverse=True)[0][0]]
 
-
     def __rotation_update__(self, R: np.matrix) -> None:
         """Multiply each point in this object by rotation matrix R."""
         self.front = [R.dot(pt).flatten() for pt in self.front]
         self.back = [R.dot(pt).flatten() for pt in self.back]
         self.position = R.dot(self.position).flatten()
         self.normal_vectors = {
-            face: R.dot(normal).flatten() for face, normal in self.normal_vectors.items()
+            face: R.dot(normal).flatten()
+            for face, normal in self.normal_vectors.items()
         }
 
     def rotate_x(self, theta: np.float32) -> None:

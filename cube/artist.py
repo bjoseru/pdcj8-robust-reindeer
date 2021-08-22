@@ -11,7 +11,17 @@ DISTANCE_TO_CAMERA = 6
 class Artist:
     """A dummy class providing a 3D drawing interface."""
 
-    __slots__ = ("screen", "h", "w", "cx", "cy", "camera_position", "camera_x", "camera_y", "camera_z")
+    __slots__ = (
+        "screen",
+        "h",
+        "w",
+        "cx",
+        "cy",
+        "camera_position",
+        "camera_x",
+        "camera_y",
+        "camera_z",
+    )
 
     def __init__(self, screen: Screen):
         """Initialise the screen drawing artist."""
@@ -25,10 +35,10 @@ class Artist:
 
     def set_initial_camera(self) -> None:
         """Set or reset the artist camera to the initial phase, at the diagonal above cube."""
-        R = rotation.Ry(30/180*np.pi) @ rotation.Rx(30/180*np.pi)
+        R = rotation.Ry(30 / 180 * np.pi) @ rotation.Rx(30 / 180 * np.pi)
 
         self.camera_position = (R @ np.array([0, 0, DISTANCE_TO_CAMERA])).flatten()
-        self.camera_x = (R @ np.array([1, 0, 0])).flatten()   # "what is right"
+        self.camera_x = (R @ np.array([1, 0, 0])).flatten()  # "what is right"
         self.camera_y = (R @ np.array([0, 1, 0])).flatten()  # "what is up"
         self.camera_z = -(R @ np.array([0, 0, 1])).flatten()
 

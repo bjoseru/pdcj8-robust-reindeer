@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def Rx(theta: np.float32) -> np.array:
     """Rotation by theta around x axis."""
     return np.array(
